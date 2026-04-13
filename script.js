@@ -70,5 +70,7 @@ function playGame() {
       const computerSelection = getComputerChoice();
       playRound(humanSelection, computerSelection);
    }
+   console.log("최종결과 사람: " + humanScore);
+   console.log("최종결과 컴퓨터: " + computerScore);
 }
 playGame();
