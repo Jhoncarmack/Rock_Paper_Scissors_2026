@@ -1,16 +1,16 @@
-let input;
-let humanScore = 0;
-let computerScore = 0;
-function getHumanChoice() {
-   input = prompt("가위 바위 보 하겠습니다. 원하시는걸 내세요. ex) Rock / Paper / Scissors");
-   if (input.toUpperCase() === "ROCK") {
-      return "Rock";
-   } else if (input.toUpperCase() === "SCISSORS") {
-      return "Scissors";
-   } else {
-      return "Paper";
-   }
-}
+const rockButton = document.createElement("button");
+rockButton.id = "rock";
+const paperButton = document.createElement("button");
+paperButton.id = "paper";
+const scissorsButton = document.createElement("button");
+scissorsButton.id = "scissors";
+const p = document.createElement("p");
+const body = document.querySelector("body");
+rockButton.textContent = "주먹";
+paperButton.textContent = "보";
+scissorsButton.textContent = "가위";
+body.appendChild(p);
+p.append(rockButton, paperButton, scissorsButton);
 
 function getComputerChoice() {
    if (Math.floor(Math.random() * 3) === 0) {
@@ -22,55 +22,126 @@ function getComputerChoice() {
    }
 }
 
-function playRound(humanChoice, computerChoice) {
-   if (humanChoice.toUpperCase() === "ROCK") {
-      if (computerChoice.toUpperCase() === "ROCK") {
-         console.log("비겼다 서로주먹이기때문입니다 ");
-      } else if (computerChoice.toUpperCase() === "SCISSORS") {
-         console.log("이겼다. 주먹이 가위를 이기기때문입니다");
+const div = document.createElement("div");
+const humanTextNode = document.createTextNode("사용자: ");
+const label1 = document.createTextNode("0");
+const computerTextNode = document.createTextNode(" | 컴퓨터: ");
+const label2 = document.createTextNode("0");
+const totalTextNode = document.createTextNode(" | 총 경기수: ");
+const label3 = document.createTextNode("0");
 
-         humanScore++;
-      } else {
-         console.log("졌다 주먹이 보한테 지기때문입니다");
+div.append(
+   humanTextNode,
+   label1,
+   computerTextNode,
+   label2,
+   totalTextNode,
+   label3,
+);
+body.appendChild(div);
 
-         computerScore++;
-      }
-   }
-   if (humanChoice.toUpperCase() === "SCISSORS") {
-      if (computerChoice.toUpperCase() === "SCISSORS") {
-         console.log("비겼다 서로 가위이기 때문입니다");
-      } else if (computerChoice.toUpperCase() === "PAPER") {
-         console.log("이겼다 가위가 보를 이기기때문입니다");
+let humanTotal = 0;
+let computerTotal = 0;
+let total = 0;
 
-         humanScore++;
-      } else {
-         console.log("졌다 가위가 주먹한테 지기때문입니다");
-
-         computerScore++;
-      }
-   }
-   if (humanChoice.toUpperCase() === "PAPER") {
-      if (computerChoice.toUpperCase() === "PAPER") {
-         console.log("비겼다 서로 보자기 이기 때문입니다");
-      } else if (computerChoice.toUpperCase() === "ROCK") {
-         console.log("이겼다. 보가 주먹을 이기기때문입니다");
-
-         humanScore++;
-      } else {
-         console.log("졌다 보가 가위한테 지기때문입니다");
-
-         computerScore++;
-      }
-   }
+function reset() {
+   label1.nodeValue = 0;
+   label2.nodeValue = 0;
+   label3.nodeValue = 0;
+   humanTotal = 0;
+   computerTotal = 0;
+   total = 0;
 }
 
-function playGame() {
-   for (let i = 0; i < 5; i++) {
-      const humanSelection = getHumanChoice();
-      const computerSelection = getComputerChoice();
-      playRound(humanSelection, computerSelection);
+let computer;
+p.addEventListener("click", (event) => {
+   let target = event.target;
+   switch (target.id) {
+      case "rock":
+         computer = getComputerChoice();
+         human = "Rock";
+
+         if (computer.toUpperCase() === "ROCK") {
+            console.log("비겼습니다 둘다 주먹이기때문입니다.");
+            total++;
+
+            label3.nodeValue = total;
+         } else if (computer.toUpperCase() === "PAPER") {
+            console.log("졌습니다. 컴퓨터는 보기 때문 보가 주먹을 이깁니다.");
+            computerTotal++;
+            label2.nodeValue = computerTotal;
+            total++;
+            label3.nodeValue = total;
+         } else {
+            console.log(
+               "이겼습니다. 컴퓨터가 가위이기에 주먹이 가위를 이깁니다.",
+            );
+            humanTotal++;
+            label1.nodeValue = humanTotal;
+            total++;
+            label3.nodeValue = total;
+         }
+
+         break;
+      case "paper":
+         computer = getComputerChoice();
+         human = "Paper";
+         if (computer.toUpperCase() === "ROCK") {
+            console.log("이겼습니다. 컴퓨터는 주먹이기에 보가 주먹을 이깁니다");
+            humanTotal++;
+            label1.nodeValue = humanTotal;
+            total++;
+            label3.nodeValue = total;
+         } else if (computer.toUpperCase() === "PAPER") {
+            console.log("비겼습니다. 둘다 보기 때문입니다.");
+            total++;
+
+            label3.nodeValue = total;
+         } else {
+            console.log("졌습니다. 컴퓨터가 가위기에 보가 가위한테 집니다");
+            computerTotal++;
+            label2.nodeValue = computerTotal;
+            total++;
+            label3.nodeValue = total;
+         }
+
+         break;
+      case "scissors":
+         computer = getComputerChoice();
+         human = "Scissors";
+         if (computer.toUpperCase() === "ROCK") {
+            console.log("졌습니다. 컴퓨터는 주먹이기에 가위가 주먹한테 집니다");
+            computerTotal++;
+            label2.nodeValue = computerTotal;
+            total++;
+            label3.nodeValue = total;
+         } else if (computer.toUpperCase() === "PAPER") {
+            console.log("이겼습니다. 컴퓨터가 보기에 가위가 보를 이깁니다");
+            humanTotal++;
+            label1.nodeValue = humanTotal;
+            total++;
+            label3.nodeValue = total;
+         } else {
+            console.log("비겼습니다 둘다 가위입니다");
+            total++;
+
+            label3.nodeValue = total;
+         }
+
+         break;
    }
-   console.log("최종결과 사람: " + humanScore);
-   console.log("최종결과 컴퓨터: " + computerScore);
-}
-playGame();
+   if (humanTotal >= 5 || computerTotal >= 5) {
+      setTimeout(() => {
+         if (humanTotal > computerTotal) {
+            alert("게임종료! 사용자 승리!");
+            reset();
+         } else if (computerTotal > humanTotal) {
+            alert("게임종료! 컴퓨터 승리!");
+            reset();
+         } else {
+            alert("게임종료! 비겼습니다");
+            reset();
+         }
+      }, 10);
+   }
+});
